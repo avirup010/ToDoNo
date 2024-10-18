@@ -1,148 +1,44 @@
-/* General Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+// Get elements
+const taskInput = document.getElementById('taskInput');
+const addTaskBtn = document.getElementById('addTaskBtn');
+const taskList = document.getElementById('taskList');
+document.addEventListener("mousemove", function (event) {
+    const x = event.clientX / window.innerWidth;
+    const y = event.clientY / window.innerHeight;
 
-body {
-    font-family: 'Arial', sans-serif; /* Changed font for entire website */
-    background: linear-gradient(135deg, #ff7e5f, #feb47b);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full height of viewport */
-}
+    document.body.style.background = `linear-gradient(135deg, rgba(255, 0, 0, ${x}), rgba(0, 0, 255, ${y}))`;
+});
 
-.container {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    width: 80%; /* Increased width for larger display */
-    max-width: 1200px; /* Max width for larger screens */
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-}
+// Function to add a task
+addTaskBtn.addEventListener('click', function () {
+    const taskText = taskInput.value;
 
-/* Header */
-h1 {
-    font-family: 'Pacifico', cursive; /* Keep this font for the header */
-    font-size: 4rem; /* Increased font size for better visibility */
-    margin-bottom: 30px;
-    color: #333;
-}
+    if (taskText) {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${taskText}</span>
+            <div class="task-buttons">
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+            </div>
+        `;
 
-/* Input Section */
-.input-section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+        // Edit functionality
+        li.querySelector('.edit-btn').addEventListener('click', function () {
+            const newTaskText = prompt("Edit your task:", taskText);
+            if (newTaskText) {
+                li.querySelector('span').innerText = newTaskText;
+            }
+        });
 
-input {
-    width: 70%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    transition: border-color 0.3s ease;
-}
+        // Delete functionality
+        li.querySelector('.delete-btn').addEventListener('click', function () {
+            taskList.removeChild(li);
+        });
 
-input:focus {
-    border-color: #ff7e5f; /* Changed focus color */
-}
-
-button {
-    width: 25%;
-    padding: 12px;
-    background-color: #ff7e5f; /* Updated button color */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #feb47b; /* Updated hover color */
-}
-
-/* Task List */
-ul {
-    list-style: none;
-    padding: 0;
-    max-height: 400px; /* Limit the height for scrolling */
-    overflow-y: auto; /* Allow scrolling for the task list */
-}
-
-li {
-    background-color: #f0f4f8;
-    padding: 15px; /* Increased padding for spaciousness */
-    margin: 20px 0; /* Adjusted margin for better spacing */
-    border-radius: 8px;
-    display: flex;
-    align-items: center; /* Align items vertically */
-    animation: slideIn 0.5s ease;
-    font-size: 1.2rem; /* Increased font size for better readability */
-}
-
-.checkbox-container {
-    margin-right: 20px; /* Space between checkbox and task text */
-}
-
-/* Ensure the checkbox is aligned vertically */
-input[type="checkbox"] {
-    transform: scale(1.5); /* Make checkbox larger for better visibility */
-    margin-top: 5px; /* Center align checkbox */
-}
-
-/* Edit and Delete Buttons */
-li button {
-    background-color: #ff4d4d;
-    border: none;
-    color: white;
-    padding: 10px 15px; /* Increased padding for better spacing */
-    margin-left: 30px; /* Increased margin for spacing */
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-li button:hover {
-    background-color: #ff3333; /* Button hover color */
-}
-
-li.completed {
-    text-decoration: line-through;
-    color: #bbb;
-}
-
-/* Footer */
-footer {
-    margin-top: 30px;
-    font-size: 1rem; /* Slightly larger font size */
-    color: #666;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
+        taskList.appendChild(li);
+        taskInput.value = ''; // Clear input
+    } else {
+        alert("Please enter a task.");
     }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideIn {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
+});
